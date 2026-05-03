@@ -1,12 +1,14 @@
 ---
 title: Thomas Blanchard
+first_name: Thomas
+last_name: Blanchard
+highlight_name: true
 role: Maître de Conférences en Philosophie
 organizations:
   - name: Université Bordeaux Montaigne
     url: https://www.u-bordeaux-montaigne.fr/
   - name: "SPH (Sciences, Philosophie, Humanités) — EA 4574"
     url: ""
-bio: ""
 interests:
   - Causation
   - Causal Modeling

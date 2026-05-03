@@ -25,15 +25,4 @@ sections:
       avatar:
         size: medium
         shape: circle
-  - block: collection
-    id: publications
-    content:
-      title: Publications
-      text: ''
-      filters:
-        folders:
-          - publication
-        exclude_featured: false
-    design:
-      view: citation
 ---
