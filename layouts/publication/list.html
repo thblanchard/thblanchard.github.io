@@ -1,5 +1,10 @@
 {{ define "main" }}
 
+{{ $is_fr := eq site.Language.Lang "fr" }}
+{{ $articles_title := cond $is_fr "Articles" "Articles" }}
+{{ $chapters_title := cond $is_fr "Chapitres d'ouvrage" "Book Chapters" }}
+{{ $other_title := cond $is_fr "Autres publications" "Other Publications" }}
+
 <div class="container max-w-3xl mx-auto px-6 mt-12">
   <h1 class="text-2xl font-bold uppercase tracking-widest text-center mb-2">{{ .Title }}</h1>
   {{ with .Content }}<div class="prose prose-slate dark:prose-invert max-w-none">{{ . }}</div>{{ end }}
@@ -7,7 +12,22 @@
 
 {{ $view := .Params.view | default "citation" }}
 {{ $block := . }}
+
+{{/* Use current-language pages when available, otherwise fall back to all pages
+     in the publication section across languages (since publications themselves
+     are language-agnostic English bibliographic entries). */}}
 {{ $all_pages := .Pages.ByDate.Reverse }}
+{{ if eq (len $all_pages) 0 }}
+  {{/* Fall back to publications from all language sites, since publication
+       entries are language-agnostic (English bibliographic data). */}}
+  {{ $collected := slice }}
+  {{ range hugo.Sites }}
+    {{ range (where .RegularPages "Section" "publication") }}
+      {{ $collected = $collected | append . }}
+    {{ end }}
+  {{ end }}
+  {{ $all_pages = sort $collected "Date" "desc" }}
+{{ end }}
 
 {{ $articles := slice }}
 {{ $chapters := slice }}
@@ -34,7 +54,7 @@
 
   {{ if gt (len $articles) 0 }}
   <div class="mt-12 container max-w-3xl w-full px-6">
-    <h2 class="text-xl font-bold uppercase tracking-wide mb-4 pb-2 border-b border-gray-300 dark:border-gray-600">Articles</h2>
+    <h2 class="text-xl font-bold uppercase tracking-wide mb-4 pb-2 border-b border-gray-300 dark:border-gray-600">{{ $articles_title }}</h2>
     <div class="flex flex-col space-y-3">
       {{ range $index, $item := $articles }}
       {{ partial "functions/render_view" (dict "page" . "item" . "view" $view "index" $index "config" (merge $config (dict "len" (len $articles)))) }}
@@ -45,7 +65,7 @@
 
   {{ if gt (len $chapters) 0 }}
   <div class="mt-12 container max-w-3xl w-full px-6">
-    <h2 class="text-xl font-bold uppercase tracking-wide mb-4 pb-2 border-b border-gray-300 dark:border-gray-600">Book Chapters</h2>
+    <h2 class="text-xl font-bold uppercase tracking-wide mb-4 pb-2 border-b border-gray-300 dark:border-gray-600">{{ $chapters_title }}</h2>
     <div class="flex flex-col space-y-3">
       {{ range $index, $item := $chapters }}
       {{ partial "functions/render_view" (dict "page" . "item" . "view" $view "index" $index "config" (merge $config (dict "len" (len $chapters)))) }}
@@ -56,7 +76,7 @@
 
   {{ if gt (len $others) 0 }}
   <div class="mt-12 container max-w-3xl w-full px-6">
-    <h2 class="text-xl font-bold uppercase tracking-wide mb-4 pb-2 border-b border-gray-300 dark:border-gray-600">Other Publications</h2>
+    <h2 class="text-xl font-bold uppercase tracking-wide mb-4 pb-2 border-b border-gray-300 dark:border-gray-600">{{ $other_title }}</h2>
     <div class="flex flex-col space-y-3">
       {{ range $index, $item := $others }}
       {{ partial "functions/render_view" (dict "page" . "item" . "view" $view "index" $index "config" (merge $config (dict "len" (len $others)))) }}

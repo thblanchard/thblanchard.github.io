@@ -1,11 +1,1 @@
-# Navigation Links
-main:
-  - name: Home
-    url: /
-    weight: 10
-  - name: Research
-    url: /publication/
-    weight: 20
-  - name: CV
-    url: /cv/
-    weight: 30
+# Per-language menus are defined in languages.yaml.
