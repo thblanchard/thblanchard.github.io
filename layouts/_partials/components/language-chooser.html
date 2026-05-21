@@ -1,0 +1,19 @@
+{{ $page := .page }}
+{{ $class := .class }}
+
+{{- if $page.IsTranslated -}}
+  <div class="flex items-center gap-2 {{ with $class }}{{ . | safeCSS }}{{ end }}">
+    <span class="text-base font-semibold text-gray-900 dark:text-gray-100">
+      {{- index hugo.Data.languages $page.Lang -}}
+    </span>
+    {{ range $page.Translations }}
+      <span class="text-gray-400 dark:text-gray-600">|</span>
+      <a
+        href="{{ .Permalink }}"
+        class="text-base text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 hover:underline transition-colors"
+      >
+        {{- index hugo.Data.languages .Lang -}}
+      </a>
+    {{ end }}
+  </div>
+{{- end -}}

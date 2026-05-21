@@ -10,11 +10,6 @@ sections:
       title: ''
       text: |
         <div class="not-prose" style="position: relative; left: 50%; transform: translateX(-50%); width: min(64rem, 92vw); padding-top: 1rem; padding-bottom: 2rem;">
-          <div class="text-right mb-4 text-sm">
-            <a href="/" class="text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">English</a>
-            <span class="text-gray-400 mx-2">|</span>
-            <span class="font-semibold">Français</span>
-          </div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10 items-start">
             <div class="md:col-span-2 text-base leading-relaxed space-y-4">
               <p>Je suis maître de conférences au département de philosophie de l'Université Bordeaux Montaigne et membre de l'équipe de recherche EA 4574 SPH. J'ai auparavant été chercheur postdoctoral en philosophie et psychologie au Concepts and Cognition Lab de UC-Berkeley dans le cadre du Varieties of Understanding Project, Assistant Professor à Illinois Wesleyan University, et Akademischer Rat (équivalent MCF) à l'Université de Cologne. J'ai obtenu mon doctorat en philosophie à Rutgers University en 2014.</p>
