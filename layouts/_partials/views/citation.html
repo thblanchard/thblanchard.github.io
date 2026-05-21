@@ -1,0 +1,47 @@
+{{ $item := .item }}
+{{ $year_value := $item.Params.event_start | default $item.Date }}
+{{ $year := (time $year_value).Format "2006" }}
+{{ $has_attachments := partial "functions/has_attachments" $item }}
+
+{{/* Find first available URL from the links array to use as the title link */}}
+{{ $first_url := "" }}
+{{ $links_raw := $item.Params.links }}
+{{ if and $links_raw (reflect.IsSlice $links_raw) (gt (len $links_raw) 0) }}
+  {{ $first := index $links_raw 0 }}
+  {{ if reflect.IsMap $first }}
+    {{ with index $first "url" }}{{ $first_url = printf "%v" . }}{{ end }}
+  {{ end }}
+{{ end }}
+
+<div class="pub-list-item view-citation" style="margin-bottom: 1.5rem">
+  <i class="far fa-file-alt pub-icon" aria-hidden="true"></i>
+
+  <span class="article-metadata li-cite-author">
+    {{ partial "page_metadata_authors" $item }}
+  </span>
+  ({{- $year -}}).
+  {{ if $first_url }}
+    {{ $is_external := or (strings.HasPrefix $first_url "http://") (strings.HasPrefix $first_url "https://") }}
+    <a href="{{ if $is_external }}{{ $first_url }}{{ else }}{{ $first_url | relURL }}{{ end }}" {{ if $is_external }}target="_blank" rel="noopener"{{ else if eq (path.Ext $first_url) ".pdf" }}target="_blank" rel="noopener"{{ end }} class="font-semibold underline hover:text-primary-600 dark:hover:text-primary-400">{{ $item.Title }}</a>.
+  {{ else }}
+    <strong>{{ $item.Title }}</strong>.
+  {{ end }}
+  {{ if $item.Params.publication_short }}
+    {{- $item.Params.publication_short | markdownify -}}.
+  {{ else if $item.Params.publication }}
+    {{- $item.Params.publication | markdownify -}}.
+  {{ end }}
+
+  {{ with $item.Params.abstract }}
+  <details class="mt-2">
+    <summary class="cursor-pointer text-sm text-primary-600 dark:text-primary-400 hover:underline select-none">Abstract</summary>
+    <div class="mt-2 text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{{ . | markdownify }}</div>
+  </details>
+  {{ end }}
+
+  {{ if $has_attachments }}
+  <div class="flex flex-wrap gap-x-3 gap-y-1 mt-2">
+    {{ partial "page_links" (dict "page" $item "is_list" 1) }}
+  </div>
+  {{ end }}
+</div>

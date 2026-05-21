@@ -30,7 +30,7 @@ sections:
                 33607 PESSAC Cedex<br />
                 FRANCE
               </address>
-              <p class="text-base"><a href="mailto:thomas.blanchard@u-bordeaux-montaigne.fr" class="text-primary-600 dark:text-primary-400 hover:underline">thomas.blanchard@u-bordeaux-montaigne.fr</a></p>
+              <p class="text-base">thomas.blanchard [at] u-bordeaux-montaigne.fr</p>
             </div>
             <div>
               <h2 class="text-2xl font-bold mb-4">Profiles</h2>
