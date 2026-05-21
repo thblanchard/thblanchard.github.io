@@ -1,33 +1,69 @@
 {{ define "main" }}
 
-<div class="max-w-prose mx-auto flex justify-center">
-  <article class="prose prose-slate lg:prose-xl dark:prose-invert">
-    <h1 class="lg:text-6xl">{{ .Title }}</h1>
-    {{ .Content }}
-  </article>
+<div class="container max-w-3xl mx-auto px-6 mt-12">
+  <h1 class="text-2xl font-bold uppercase tracking-widest text-center mb-2">{{ .Title }}</h1>
+  {{ with .Content }}<div class="prose prose-slate dark:prose-invert max-w-none">{{ . }}</div>{{ end }}
 </div>
 
 {{ $view := .Params.view | default "citation" }}
 {{ $block := . }}
-{{ $pages := .Pages.ByDate.Reverse }}
+{{ $all_pages := .Pages.ByDate.Reverse }}
+
+{{ $articles := slice }}
+{{ $chapters := slice }}
+{{ $others := slice }}
+
+{{ range $all_pages }}
+  {{ $pub_section := .Params.pub_section | default "" }}
+  {{ $types := .Params.publication_types | default slice }}
+  {{ if eq $pub_section "other" }}
+    {{ $others = $others | append . }}
+  {{ else if in $types "chapter" }}
+    {{ $chapters = $chapters | append . }}
+  {{ else }}
+    {{ $articles = $articles | append . }}
+  {{ end }}
+{{ end }}
+
 {{ $config := dict
   "columns" (.Params.columns | default 2)
-  "len" (len $pages)
   "fill_image" (.Params.fill_image | default true)
-  "show_date" (.Params.show_date | default true)
-  "show_read_time" (.Params.show_read_time | default true)
-  "show_read_more" (.Params.show_read_more | default true)
 }}
 
 <div class="flex flex-col items-center">
 
-  {{ partial "functions/render_view" (dict "fragment" "start" "page" $block "item" . "view" $view "config" $config) }}
-
-  {{ range $index, $item := $pages }}
-  {{ partial "functions/render_view" (dict "page" . "item" . "view" $view "index" $index "config" $config) }}
+  {{ if gt (len $articles) 0 }}
+  <div class="mt-12 container max-w-3xl w-full px-6">
+    <h2 class="text-xl font-bold uppercase tracking-wide mb-4 pb-2 border-b border-gray-300 dark:border-gray-600">Articles</h2>
+    <div class="flex flex-col space-y-3">
+      {{ range $index, $item := $articles }}
+      {{ partial "functions/render_view" (dict "page" . "item" . "view" $view "index" $index "config" (merge $config (dict "len" (len $articles)))) }}
+      {{ end }}
+    </div>
+  </div>
   {{ end }}
 
-  {{ partial "functions/render_view" (dict "fragment" "end" "page" $block "item" . "view" $view) }}
+  {{ if gt (len $chapters) 0 }}
+  <div class="mt-12 container max-w-3xl w-full px-6">
+    <h2 class="text-xl font-bold uppercase tracking-wide mb-4 pb-2 border-b border-gray-300 dark:border-gray-600">Book Chapters</h2>
+    <div class="flex flex-col space-y-3">
+      {{ range $index, $item := $chapters }}
+      {{ partial "functions/render_view" (dict "page" . "item" . "view" $view "index" $index "config" (merge $config (dict "len" (len $chapters)))) }}
+      {{ end }}
+    </div>
+  </div>
+  {{ end }}
+
+  {{ if gt (len $others) 0 }}
+  <div class="mt-12 container max-w-3xl w-full px-6">
+    <h2 class="text-xl font-bold uppercase tracking-wide mb-4 pb-2 border-b border-gray-300 dark:border-gray-600">Other Publications</h2>
+    <div class="flex flex-col space-y-3">
+      {{ range $index, $item := $others }}
+      {{ partial "functions/render_view" (dict "page" . "item" . "view" $view "index" $index "config" (merge $config (dict "len" (len $others)))) }}
+      {{ end }}
+    </div>
+  </div>
+  {{ end }}
 
 </div>
 

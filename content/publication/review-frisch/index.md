@@ -5,5 +5,6 @@ authors:
 date: "2015-01-01"
 publication: "*Notre Dame Philosophical Reviews*"
 publication_types: ["article-journal"]
+pub_section: other
 abstract: ""
 ---

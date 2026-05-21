@@ -5,6 +5,7 @@ authors:
 date: "2018-01-01"
 publication: "*Encyclopédie Philosophique*"
 publication_types: ["article-journal"]
+pub_section: other
 abstract: ""
 links:
   - name: Article
